@@ -12,6 +12,18 @@ if (!process.env.OPENAI_API_KEY) {
 
 export const runtime = "edge"; // 'nodejs' (default) | 'edge'
 
+export async function OPTIONS(request: Request) {
+  return cors(
+    request,
+    new Response(null, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+  );
+}
+
 export async function POST(req: Request): Promise<Response> {
   const { newTransriptBlock, previousTranscriptBlocks, previousNotes } =
     (await req.json()) as {
