@@ -68,9 +68,5 @@ export async function POST(req: Request): Promise<Response> {
   };
 
   const stream = await OpenAIStream(payload);
-  return new Response(stream, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
+  return new Response(stream);
 }
