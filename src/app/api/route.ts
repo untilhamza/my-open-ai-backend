@@ -4,6 +4,7 @@ import {
   Notes,
   preparePrompt,
 } from "@/utils/generateNotesHelpers";
+import { NextResponse } from "next/server";
 const cors = require("cors");
 
 if (!process.env.OPENAI_API_KEY) {
@@ -80,7 +81,12 @@ export async function POST(req: Request): Promise<Response> {
   };
 
   const stream = await OpenAIStream(payload);
-  return new Response(stream, {
+  // return new Response(stream, {
+  //   headers: {
+  //     "Access-Control-Allow-Origin": "*",
+  //   },
+  // });
+  return new NextResponse(stream, {
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
