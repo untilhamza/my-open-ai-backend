@@ -23,6 +23,7 @@ function setCorsHeaders(response: NextResponse, origin: string | null) {
     "Content-Type, Authorization"
   );
   response.headers.set("Access-Control-Max-Age", "86400");
+  console.log(response);
   // allow all subdomains of 'slid.cc'
   // if (origin?.endsWith(".slid.cc")) {
   //   whitelist.push(origin);
