@@ -22,8 +22,8 @@ export function middleware(request: Request) {
 
   console.log("Middleware!");
 
-  console.log("reqeust method ", request.method);
-  console.log("request url ", request.url);
+  console.log("req method in middleware  ", request.method);
+  console.log("request url in middleware ", request.url);
 
   return NextResponse.next();
 }
