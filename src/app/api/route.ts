@@ -10,21 +10,21 @@ if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
 }
 
-// export async function OPTIONS(request: Request) {
-//   const allowedOrigin = request.headers.get("origin");
-//   const response = new NextResponse(null, {
-//     status: 200,
-//     headers: {
-//       "Access-Control-Allow-Origin": allowedOrigin || "*",
-//       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-//       "Access-Control-Allow-Headers":
-//         "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
-//       "Access-Control-Max-Age": "86400",
-//     },
-//   });
+export async function OPTIONS(request: Request) {
+  const allowedOrigin = request.headers.get("origin");
+  const response = new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": allowedOrigin || "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
+      "Access-Control-Max-Age": "86400",
+    },
+  });
 
-//   return response;
-// }
+  return response;
+}
 
 export async function POST(req: Request): Promise<Response> {
   const { newTransriptBlock, previousTranscriptBlocks, previousNotes } =
@@ -81,18 +81,8 @@ export async function POST(req: Request): Promise<Response> {
     n: 1,
   };
 
-  const allowedOrigin = req.headers.get("origin");
   const stream = await OpenAIStream(payload);
-  const response = new NextResponse(stream, {
-    status: 200,
-    // headers: {
-    //   "Access-Control-Allow-Origin": allowedOrigin || "*",
-    //   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    //   "Access-Control-Allow-Headers":
-    //     "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
-    //   "Access-Control-Max-Age": "86400",
-    // },
-  });
+  const response = new NextResponse(stream);
 
   return response;
 }
