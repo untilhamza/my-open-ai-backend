@@ -13,18 +13,35 @@ if (!process.env.OPENAI_API_KEY) {
 
 export const runtime = "edge"; // 'nodejs' (default) | 'edge'
 
+// export async function OPTIONS(request: Request) {
+//   return cors(
+//     request,
+//     new Response(null, {
+//       status: 200,
+//       headers: {
+//         "Access-Control-Allow-Origin": "*",
+//         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+//         "Access-Control-Allow-Headers": "Content-Type, Authorization",
+//       },
+//     })
+//   );
+// }
+
 export async function OPTIONS(request: Request) {
-  return cors(
-    request,
-    new Response(null, {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    })
+  const response = new NextResponse(null);
+
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
   );
+  response.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+  response.headers.set("Access-Control-Max-Age", "86400");
+
+  return response;
 }
 
 //for cors
