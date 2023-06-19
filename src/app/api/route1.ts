@@ -5,53 +5,59 @@ import {
   preparePrompt,
 } from "@/utils/generateNotesHelpers";
 import { NextResponse } from "next/server";
+const cors = require("cors");
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
 }
 
-const whitelist = ["http://localhost:3000", "https://localhost:3000"];
-
-function setCorsHeaders(response: NextResponse, origin: string | null) {
-  response.headers.set("Access-Control-Allow-Origin", origin || "*");
-  response.headers.set(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-  response.headers.set(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization"
-  );
-  response.headers.set("Access-Control-Max-Age", "86400");
-  // allow all subdomains of 'slid.cc'
-  // if (origin?.endsWith(".slid.cc")) {
-  //   whitelist.push(origin);
-  // }
-
-  // if (!origin || whitelist.indexOf(origin) !== -1) {
-  //   response.headers.set("Access-Control-Allow-Origin", origin || "*");
-  //   response.headers.set(
-  //     "Access-Control-Allow-Methods",
-  //     "GET, POST, PUT, DELETE, OPTIONS"
-  //   );
-  //   response.headers.set(
-  //     "Access-Control-Allow-Headers",
-  //     "Content-Type, Authorization"
-  //   );
-  //   response.headers.set("Access-Control-Max-Age", "86400");
-  // }
-}
+export const runtime = "nodejs"; // 'nodejs' (default) | 'edge'
 
 export async function OPTIONS(request: Request) {
-  const response = new NextResponse(null);
-  setCorsHeaders(response, request.headers.get("origin"));
-  return response;
+  return cors(
+    request,
+    new Response(null, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": "86400",
+        preflightContinue: "false",
+      },
+    })
+  );
 }
 
+// export async function OPTIONS(request: Request) {
+//   const response = new NextResponse(null);
+
+//   response.headers.set("Access-Control-Allow-Origin", "*");
+//   response.headers.set(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, PUT, DELETE, OPTIONS"
+//   );
+//   response.headers.set(
+//     "Access-Control-Allow-Headers",
+//     "Content-Type, Authorization"
+//   );
+//   response.headers.set("Access-Control-Max-Age", "86400");
+
+//   return response;
+// }
+
+//for cors
 export async function GET(request: Request) {
-  const response = new NextResponse("Hello, Next.js!");
-  setCorsHeaders(response, request.headers.get("origin"));
-  return response;
+  return new Response("Hello, Next.js!", {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Max-Age": "86400",
+      preflightContinue: "false",
+    },
+  });
 }
 
 export async function POST(req: Request): Promise<Response> {
@@ -110,7 +116,18 @@ export async function POST(req: Request): Promise<Response> {
   };
 
   const stream = await OpenAIStream(payload);
-  const response = new NextResponse(stream, { status: 200 });
-  setCorsHeaders(response, req.headers.get("origin"));
-  return response;
+  // return new Response(stream, {
+  //   headers: {
+  //     "Access-Control-Allow-Origin": "*",
+  //   },
+  // });
+  return new NextResponse(stream, { status: 200 });
+  // return new Response(stream, {
+  //   status: 200,
+  //   headers: {
+  //     "Access-Control-Allow-Origin": "*",
+  //     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  //     "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  //   },
+  // });
 }

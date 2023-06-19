@@ -9,15 +9,15 @@ export function middleware(request: Request) {
   const origin = request.headers.get("origin");
   console.log(origin);
 
-  if (origin && !allowedOrigins.includes(origin)) {
-    return new NextResponse(null, {
-      status: 400,
-      statusText: "Bad Request",
-      headers: {
-        "Content-Type": "text/plain",
-      },
-    });
-  }
+  // if (origin && !allowedOrigins.includes(origin)) {
+  //   return new NextResponse(null, {
+  //     status: 400,
+  //     statusText: "Bad Request",
+  //     headers: {
+  //       "Content-Type": "text/plain",
+  //     },
+  //   });
+  // }
 
   console.log("Middleware!");
 
