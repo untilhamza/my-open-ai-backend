@@ -1,30 +1,21 @@
 import { NextResponse } from "next/server";
 
-const allowedOrigins =
-  process.env.NODE_ENV === "production"
-    ? ["*", "https://slid.cc", "https://www.slid.cc"]
-    : ["http://localhost:3000"];
-
 export function middleware(request: Request) {
   const origin = request.headers.get("origin");
   console.log(origin);
 
-  // if (origin && !allowedOrigins.includes(origin)) {
-  //   return new NextResponse(null, {
-  //     status: 400,
-  //     statusText: "Bad Request",
-  //     headers: {
-  //       "Content-Type": "text/plain",
-  //     },
-  //   });
-  // }
-
+  const response = NextResponse.next();
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  response.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+  response.headers.set("Access-Control-Max-Age", "86400");
   console.log("Middleware!");
-
   console.log(request.method);
   console.log(request.url);
-
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
