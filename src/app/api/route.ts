@@ -100,5 +100,13 @@ export async function POST(req: Request): Promise<Response> {
   //     "Access-Control-Allow-Origin": "*",
   //   },
   // });
-  return new NextResponse(stream);
+  //return new NextResponse(stream);
+  return new Response(stream, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  });
 }
