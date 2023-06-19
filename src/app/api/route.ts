@@ -25,6 +25,18 @@ export async function OPTIONS(request: Request) {
   );
 }
 
+//for cors
+export async function GET(request: Request) {
+  return new Response("Hello, Next.js!", {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  });
+}
+
 export async function POST(req: Request): Promise<Response> {
   const { newTransriptBlock, previousTranscriptBlocks, previousNotes } =
     (await req.json()) as {
