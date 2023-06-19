@@ -48,14 +48,6 @@
 
 // next.config.js
 module.exports = {
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "https://my-open-ai-backend.vercel.app/:path*",
-      },
-    ];
-  },
   async headers() {
     return [
       {

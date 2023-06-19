@@ -11,7 +11,7 @@ if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
 }
 
-export const runtime = "edge"; // 'nodejs' (default) | 'edge'
+export const runtime = "nodejs"; // 'nodejs' (default) | 'edge'
 
 export async function OPTIONS(request: Request) {
   return cors(
