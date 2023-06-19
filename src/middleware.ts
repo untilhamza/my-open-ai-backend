@@ -7,7 +7,8 @@ const allowedOrigins =
 
 export function middleware(request: Request) {
   const origin = request.headers.get("origin");
-  console.log(origin);
+  console.log("origin in middleware ", origin);
+  console.log("request in middleware ", request);
 
   // if (origin && !allowedOrigins.includes(origin)) {
   //   return new NextResponse(null, {
@@ -21,8 +22,8 @@ export function middleware(request: Request) {
 
   console.log("Middleware!");
 
-  console.log(request.method);
-  console.log(request.url);
+  console.log("reqeust method ", request.method);
+  console.log("request url ", request.url);
 
   return NextResponse.next();
 }
