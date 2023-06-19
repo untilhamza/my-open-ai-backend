@@ -100,9 +100,5 @@ export async function POST(req: Request): Promise<Response> {
   //     "Access-Control-Allow-Origin": "*",
   //   },
   // });
-  return new NextResponse(stream, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
+  return new NextResponse(stream);
 }
