@@ -1,5 +1,6 @@
 export type TranscriptBlock = {
-  text: string;
+  // text: string;
+  finalizedText: string;
 };
 
 export type Notes = {
@@ -8,11 +9,7 @@ export type Notes = {
 };
 
 const preparePreviousBlocksText = (blocks: TranscriptBlock[]): string => {
-  return blocks
-    .map(
-      (block, index) => `**Block ${index + 1} Transcript:**\n${block.text}\n`
-    )
-    .join("\n");
+  return blocks.map((block, index) => `\n${block.finalizedText}\n`).join("\n");
 };
 
 export const preparePrompt = (
@@ -23,8 +20,8 @@ export const preparePrompt = (
   const previousBlocksText = preparePreviousBlocksText(
     previousTranscriptBlocks
   );
-  const previousNoteText = `**Previous Notes:**\n${previousNote.text}\n`;
-  const newBlockText = `**New Block Transcript:**\n${newTranscriptBlock.text}\n`;
+  const previousNoteText = `Previous Notes: \n${previousNote.text}\n`;
+  const newBlockText = `New Transcript text: \n${newTranscriptBlock.finalizedText}\n`;
 
   return `As a focused student, you're deeply engrossed in a video lecture on entrepreneurship and taking comprehensive study notes for future reference. Some parts of the video's transcript might be incorrect, and notes from earlier segments of the lecture have been provided.
 
@@ -61,3 +58,31 @@ Your goal is to extract key information and create additional study notes from t
 //   previousNotes,
 //   newTransriptBlock
 // );
+
+export const preparePromptKorean = (
+  previousTranscriptBlocks: TranscriptBlock[],
+  previousNote: Notes,
+  newTranscriptBlock: TranscriptBlock
+): string => {
+  const previousBlocksText = preparePreviousBlocksText(
+    previousTranscriptBlocks
+  );
+  const previousNoteText = `이전 노트: \n${previousNote.text}\n`;
+  const newBlockText = `새로운 트랜스크립트 텍스트: \n${newTranscriptBlock.finalizedText}\n`;
+
+  return `당신은 창업에 관한 비디오 강의에 깊이 몰입한 열심히 공부하는 학생이라고 상상해보세요. 비디오의 일부 트랜스크립트는 잘못된 부분이 있을 수 있으며, 강의의 이전 세그먼트에 대한 노트가 제공됩니다.
+
+다음은 이전 트랜스크립트의 세그먼트입니다:
+
+${previousBlocksText}
+
+다음은 이전 세그먼트의 노트입니다:
+
+${previousNoteText}
+
+비디오 트랜스크립트의 새 세그먼트는 다음과 같습니다:
+
+${newBlockText}
+
+당신의 목표는 이 새 부분의 트랜스크립트에서 핵심 정보를 추출하고 이를 기반으로 추가 학습 노트를 만드는 것입니다. 명확성, 깊이, 정확성을 목표로 노트를 작성하세요. 이 새로운 노트는 기존의 노트에 추가되어 연속성과 논리적 진행을 유지해야 합니다. 스피커의 주요 포인트, 논점, 그리고 미묘한 표현을 노트에 포함하세요. 노트를 반환할 때 레이블이나 제목을 사용하지 마세요. 순수한 노트 내용만 제공하세요.`;
+};

@@ -3,6 +3,7 @@ import {
   TranscriptBlock,
   Notes,
   preparePrompt,
+  preparePromptKorean,
 } from "@/utils/generateNotesHelpers";
 import { NextResponse } from "next/server";
 
@@ -27,12 +28,17 @@ export async function OPTIONS(request: Request) {
 }
 
 export async function POST(req: Request): Promise<Response> {
-  const { newTransriptBlock, previousTranscriptBlocks, previousNotes } =
-    (await req.json()) as {
-      newTransriptBlock: TranscriptBlock;
-      previousTranscriptBlocks: TranscriptBlock[];
-      previousNotes: Notes;
-    };
+  const {
+    newTransriptBlock,
+    previousTranscriptBlocks,
+    previousNotes,
+    language,
+  } = (await req.json()) as {
+    newTransriptBlock: TranscriptBlock;
+    previousTranscriptBlocks: TranscriptBlock[];
+    previousNotes: Notes;
+    language: string;
+  };
 
   let missingParams = [];
 
@@ -65,11 +71,18 @@ export async function POST(req: Request): Promise<Response> {
       },
       {
         role: "user",
-        content: preparePrompt(
-          previousTranscriptBlocks,
-          previousNotes,
-          newTransriptBlock
-        ),
+        content:
+          language === "한국어"
+            ? preparePromptKorean(
+                previousTranscriptBlocks,
+                previousNotes,
+                newTransriptBlock
+              )
+            : preparePrompt(
+                previousTranscriptBlocks,
+                previousNotes,
+                newTransriptBlock
+              ),
       },
     ],
     temperature: 0.7,
